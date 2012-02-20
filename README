@@ -1,2 +1,6 @@
+-- 20/2
+-- Brute force implemented by recursion. Working on combining logic + brute force and making it a cleaner code.
+
+--16/2
 -- Attempt at solving all 9*9 sudokus. Was done a year back, started improving it recently and work is going on to make it work for hard sudokus (brute force).
 -- Was inspired to code this after being unable to solve a sudoku in newspaper for 3 hours in freshmen year! :)
