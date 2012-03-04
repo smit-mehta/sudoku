@@ -2,6 +2,7 @@
 
 using namespace std;
 
+// For checking whether a given value is already in the box
 int box_valid(int a[][10], int u_i, int l_i, int u_j, int l_j, int val) {
 	int i, j, sum = 0;
 
@@ -18,6 +19,7 @@ int box_valid(int a[][10], int u_i, int l_i, int u_j, int l_j, int val) {
 		return 0;
 }
 
+// For checking whether a given value is only in one of the "o" array of elements in the given box
 int check_box(int o[][10][10], int u_i, int l_i, int u_j, int l_j, int val) {
 	int i, j, f = 0;
 
@@ -35,6 +37,7 @@ int check_box(int o[][10][10], int u_i, int l_i, int u_j, int l_j, int val) {
 
 }
 
+// For filling the value k in a particular element of a given box.
 int fill_k(int a[][10], int o[][10][10], int u_i, int l_i, int u_j, int l_j,
 		int val) {
 	int i, j;
@@ -49,9 +52,11 @@ int fill_k(int a[][10], int o[][10][10], int u_i, int l_i, int u_j, int l_j,
 	}
 }
 
+// For checking if a value 'val' can occur at x, y on the basis of horizontal, vertical and box condition
 int is_valid(int a[][10], int x, int y, int val) {
 	int i, j, sum = 0, p = (x - 1) / 3, q = (y - 1) / 3, b, c;
 
+	// Horizontal
 	for (i = 1; i < 10; i++) {
 		if (a[x][i] == val)
 			sum++;
@@ -61,7 +66,8 @@ int is_valid(int a[][10], int x, int y, int val) {
 		return 0;
 
 	sum = 0;
-
+	
+	// Vertical
 	for (i = 1; i < 10; i++) {
 		if (a[i][y] == val)
 			sum++;
@@ -71,7 +77,8 @@ int is_valid(int a[][10], int x, int y, int val) {
 		return 0;
 
 	sum = 0;
-
+	
+	// Box
 	for (i = 0; i < 3; i++) {
 		for (j = 0; j < 3; j++) {
 			if (i == p && j == q)
@@ -83,9 +90,11 @@ int is_valid(int a[][10], int x, int y, int val) {
 
 }
 
+// Recursive Brute Force
 void put(int a[][10], int x, int y) {
 	int i, j;
-
+	
+	// If row no. > 9, bottom out.
 	if (x > 9) {
 		cout << "\nSolved Sudoku\n\n";
 
@@ -97,6 +106,7 @@ void put(int a[][10], int x, int y) {
 		}
 	}
 
+	// If the cell is already filled, move on.
 	else if (a[x][y] != 0) {
 		if (y < 9)
 			put(a, x, y + 1);
@@ -104,6 +114,7 @@ void put(int a[][10], int x, int y) {
 			put(a, x + 1, 1);
 	}
 
+	// Otherwise, iteratively put the value in the box if its valid
 	else {
 		for (i = 1; i < 10; i++) {
 			a[x][y] = i;
@@ -136,6 +147,7 @@ int main() {
 
 	start:
 
+	// Initialising the "o" matrix. Stores the possible numbers for each cell.
 	for (c = 1; c < 10; c++) {
 		for (d = 1; d < 10; d++) {
 			for (e = 1; e < 10; e++)
@@ -143,6 +155,7 @@ int main() {
 		}
 	}
 
+	// Filling the "o" matrix by using is_valid(). is_valid() checks whether that number can be added there by horizontal, vertical and box condition
 	for (i = 1; i < 10; i++) {
 		for (j = 1; j < 10; j++) {
 
@@ -161,6 +174,7 @@ int main() {
 		}
 	}
 
+	// If there is only one possibility in a cell, then fill it. (Unit propogation)
 	for (i = 1; i < 10; i++) {
 		for (j = 1; j < 10; j++) {
 			if (a[i][j] == 0) {
@@ -183,6 +197,7 @@ int main() {
 		}
 	}
 
+	// If in the entire row, only the given particular cell has the unique value as one of the possibility, then fill it
 	for (i = 1; i < 10; i++) {
 		for (k = 1; k < 10; k++) {
 			f = 0;
@@ -201,6 +216,7 @@ int main() {
 		}
 	}
 
+	// If in the entire column, only the given particular cell has the unique value as one of the possibility, then fill it
 	for (j = 1; j < 10; j++) {
 		for (k = 1; k < 10; k++) {
 			f = 0;
@@ -218,6 +234,7 @@ int main() {
 		}
 	}
 
+	// If in the entire box, only the given particular cell has the unique value as one of the possibility, then fill it
 	for (i = 1; i < 10; i++) {
 		for (j = 1; j < 10; j++) {
 
@@ -242,6 +259,7 @@ int main() {
 		}
 	}
 
+	// After filling the obvious stuff by following all the rules, now applying brute force to fill the remaining positions.
 	put(a, 1, 1);
 
 	return 0;
